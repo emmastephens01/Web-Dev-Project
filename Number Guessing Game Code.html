@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #game-container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        input[type="number"] {
+            padding: 8px;
+            font-size: 16px;
+            width: 60%;
+            margin: 10px 0;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result, #score {
+            font-size: 18px;
+            color: #555;
+            margin: 10px 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #reset-button {
+            background-color: #f44336;
+        }
+
+        #reset-button:hover {
+            background-color: #da190b;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Number Guessing Game</h1>
+        <p>Guess a number between 1 and 100!</p>
+        
+        <!-- User Input Section -->
+        <input type="number" id="user-input" placeholder="Enter a number" min="1" max="100">
+        <button id="submit-button">Submit Guess</button>
+        
+        <!-- Game Feedback Section -->
+        <div id="result" class="hidden"></div>
+        <div id="score" class="hidden"></div>
+        
+        <!-- Reset Button -->
+        <button id="reset-button" class="hidden">Start New Game</button>
+
+        <footer>
+            <p>Made with ❤️ by Emma!</p>
+        </footer>
+    </div>
+
+    <script>
+        // Initial Setup
+        let secretNumber = Math.floor(Math.random() * 100) + 1;
+        let attemptCount = 0;
+
+        // DOM Elements
+        const submitButton = document.getElementById('submit-button');
+        const userInput = document.getElementById('user-input');
+        const resultDiv = document.getElementById('result');
+        const scoreDiv = document.getElementById('score');
+        const resetButton = document.getElementById('reset-button');
+
+        // Joke/Fact Generator (for fun)
+        const jokes = [
+            "Why don't skeletons fight each other? They don't have the guts!",
+            "I told my wife she was drawing her eyebrows too high. She looked surprised.",
+            "Why don't programmers like nature? It has too many bugs."
+        ];
+
+        // Game Functions
+        function getRandomJoke() {
+            return jokes[Math.floor(Math.random() * jokes.length)];
+        }
+
+        function checkGuess() {
+            const userGuess = parseInt(userInput.value);
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+                resultDiv.textContent = 'Please enter a valid number between 1 and 100.';
+                resultDiv.style.color = 'red';
+                return;
+            }
+
+            attemptCount++;
+
+            if (userGuess === secretNumber) {
+                resultDiv.textContent = `Correct! You guessed the number in ${attemptCount} attempts!`;
+                resultDiv.style.color = 'green';
+                scoreDiv.textContent = getRandomJoke();
+                scoreDiv.classList.remove('hidden');
+                resetButton.classList.remove('hidden');
+                submitButton.disabled = true;
+            } else if (userGuess < secretNumber) {
+                resultDiv.textContent = 'Too low! Try again.';
+                resultDiv.style.color = 'orange';
+            } else {
+                resultDiv.textContent = 'Too high! Try again.';
+                resultDiv.style.color = 'orange';
+            }
+
+            resultDiv.classList.remove('hidden');
+        }
+
+        function resetGame() {
+            secretNumber = Math.floor(Math.random() * 100) + 1;
+            attemptCount = 0;
+            userInput.value = '';
+            resultDiv.classList.add('hidden');
+            scoreDiv.classList.add('hidden');
+            resetButton.classList.add('hidden');
+            submitButton.disabled = false;
+        }
+
+        // Event Listeners
+        submitButton.addEventListener('click', checkGuess);
+        resetButton.addEventListener('click', resetGame);
+    </script>
+</body>
+</html>
